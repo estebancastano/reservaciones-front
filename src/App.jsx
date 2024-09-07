@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import TableComponent from './components/Table';  // Asegúrate de usar el componente TableComponent
+import TableComponent from './components/Table';  
+import Admin from './components/AdminPage';  
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,25 +13,33 @@ const App = () => {
   };
 
   return (
-    <div className='bg-primary'>
-      <Header />
-
-      <div className='mx-auto max-w-4xl mt-8'>
-      <input
-        type='text'
-        placeholder="Buscar..."
-        onChange={handleChange}
-        value={searchTerm}
-        className='rounded-lg'
-      />
+    <BrowserRouter>
+      <div className='bg-primary'>
+        <Header />
+        {/* Definir las rutas */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className='mx-auto max-w-4xl mt-8'>
+                <input
+                  type='text'
+                  placeholder="Buscar..."
+                  onChange={handleChange}
+                  value={searchTerm}
+                  className='rounded-lg'
+                />
+                <div className="mt-10 max-w-4xl mx-auto text-2xl sm:text-xl rounded-lg">
+                  <TableComponent searchTerm={searchTerm} />
+                </div>
+              </div>
+            }
+          />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
       </div>
-
-      <div className="mt-10 max-w-4xl mx-auto text-2xl sm:text-xl rounded-lg">
-        <TableComponent searchTerm={searchTerm} />
-      </div>
-    </div>
+    </BrowserRouter>
   );
 };
 
 export default App;
-
