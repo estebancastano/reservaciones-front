@@ -12,6 +12,7 @@ export default {
         kingBlue:'#007AFF',
         neonGreen:'#5AF92F',
         boldRed:'#FF0000',
+        lightGray: '#F3F4F6',
       }
     },
   },
