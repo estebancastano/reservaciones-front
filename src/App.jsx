@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import TableComponent from './components/Table';  
-import Admin from './components/AdminPage';  
+import TableComponent from './components/Table';
+import Admin from './components/Admin';
+import Login from './components/Login';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,7 +36,22 @@ const App = () => {
               </div>
             }
           />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={
+            <div className='mx-auto max-w-4xl mt-8'>
+              <Admin />
+              <div className='mx-auto max-w-4xl mt-8'>
+                <input
+                  type='text'
+                  placeholder="Buscar..."
+                  onChange={handleChange}
+                  value={searchTerm}
+                  className='rounded-lg mb-8'
+                />
+                </div>
+              <TableComponent searchTerm={searchTerm} />
+            </div>
+          } />
+          <Route path="/login" element={<Login/>}/>
         </Routes>
       </div>
     </BrowserRouter>
