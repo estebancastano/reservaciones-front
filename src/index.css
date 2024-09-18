@@ -3,9 +3,18 @@
 @tailwind utilities;
 
 body {
-    background-color: #F6F1F1;
+    @apply bg-gradient-to-r from-cyan-500 to-blue-500;
+    @apply text-lightGreen;
+}
+
+html{
+    font-family: poppins,system-ui, sans-serif;
 }
 
 input:disabled{
     background-color: #D9D9D9;
+}
+
+input{
+    color: black;
 }
