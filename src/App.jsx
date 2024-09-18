@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <div className='bg-primary'>
+      <div className='bg-gradient-to-r from-cyan-500 to-blue-500'>
         <Header />
         {/* Definir las rutas */}
         <Routes>

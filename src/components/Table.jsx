@@ -6,7 +6,7 @@ const TableComponent = ({ searchTerm }) => {
     { name: 'Asignación', selector: row => row.asignacion, width:"100px" },
     { name: 'Documento', selector: row => row.documento, width:"100px" },
     { name: 'Observación', selector: row => row.observacion, wrap:true, width:"300px" },
-    { name: 'Fecha', selector: row => row.fecha, width:"100px"},
+    { name: 'Fecha', selector: row => row.fecha, width:"100px", wrap:true},
     { name: 'Turno', selector: row => row.turno, width:"150px" },
     { name: 'Vehículo', selector: row => row.vehiculo, width:"100px" }
   ];
