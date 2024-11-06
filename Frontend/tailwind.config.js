@@ -14,6 +14,7 @@ export default {
         boldRed:'#FF0000',
         lightGray: '#F3F4F6',
         lightGreen: '#B8DEC4',
+        anotherColor:'#0FA4AF',
       }
     },
   },
