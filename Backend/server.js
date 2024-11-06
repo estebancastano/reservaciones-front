@@ -8,7 +8,14 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Permite solicitudes desde cualquier origen
+const corsOptions = ({
+    origin: '*', // Permitir origen del frontend
+    credentials: true,
+    optionSuccessStatus:200,
+    mode: cors,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+})
+app.use(cors(corsOptions)); // Permite solicitudes desde cualquier origen
 
 // Configurar la conexión a MySQL
 const db = mysql.createConnection({
