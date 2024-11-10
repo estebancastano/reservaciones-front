@@ -7,20 +7,20 @@ import 'react-toastify/dist/ReactToastify.css';
 const Admin = () => {
     const [formData, setFormData] = useState({
         estado: "",
-        fechaFin: "",
-        fechaInicio: "",
-        municipio: "",
-        desplazamiento: {},
-        usuarioCrea: {},
-        vehiculo: {},
-        mision:{},
+        tiempoFin: "",
+        tiempoInicio: "",
+        municipio: { idMunicipio: "" },
+        desplazamiento: { idDesplazamiento: "" },
+        usuarioCrea: { idusuario: "" },
+        vehiculo: { idVehiculo: "" },
+        misiones: [{ numeroMision: "" }]
     });
 
     const [municipios, setMunicipios] = useState([]);
     const [vehiculos, setVehiculos] = useState([]);
     const [desplazamientos, setDesplazamientos] = useState([]);
     const [creadores, setCreadores] = useState([]);
-    const [misiones, setMisiones]=useState([]);
+    const [misiones, setMisiones] = useState([]);
 
     useEffect(() => {
         // Carga los municipios desde el backend
@@ -69,6 +69,27 @@ const Admin = () => {
         e.preventDefault();
         if (isAuthenticated) {
             try {
+                console.log(formData);
+                const body = {
+                    tiempoInicio: formData.tiempoInicio,
+                    tiempoFin: formData.tiempoFin,
+                    estado: formData.estado,
+                    vehiculo: {
+                        idVehiculo: formData.vehiculo
+                    },
+                    usuarioCrea: {
+                        idusuario: formData.usuarioCrea
+                    },
+                    tipoDesplazamiento: {
+                        idDesplazamiento: formData.desplazamiento
+                    },
+                    municipio: {
+                        idMunicipio: formData.municipio
+                    },
+                    misiones: [{ numeroMision: formData.misiones }]
+                }
+
+                console.log(body);
                 const response = await fetch("http://localhost:8000/api/v1/viajes", {
                     method: "POST",
                     mode: 'cors',
@@ -77,21 +98,22 @@ const Admin = () => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(formData),
-
+                    body: JSON.stringify(body),
+                    
                 });
                 if (response.ok) {
-                    alert("Agendamiento guardado exitosamente.");
+                    toast.success("Agendamiento guardado exitosamente.");
                     // Opcional: reiniciar el formulario
                     setFormData({
                         estado: "",
-                        fechaFin: "",
-                        fechaInicio: "",
-                        municipio: "",
-                        desplazamiento: "",
-                        usuarioCrea: "",
-                        vehiculo: "",
-                        mision:""
+                        tiempoFin: "",
+                        tiempoInicio: "",
+                        municipio: { idMunicipio: "" },
+                        desplazamiento: { idDesplazamiento: "" },
+                        usuarioCrea: { idusuario: "" },
+                        vehiculo: { idVehiculo: "" },
+                        misiones: [{ numeroMision: "" }]
+
                     });
                 } else {
                     toast.error("Error al guardar el agendamiento.");
@@ -102,7 +124,7 @@ const Admin = () => {
         }
     };
 
-    console.log(formData);
+
 
     return (
         <>
@@ -135,8 +157,8 @@ const Admin = () => {
                             <label>Fecha Inicio</label>
                             <input
                                 type="datetime-local"
-                                name="fechaInicio"
-                                value={formData.fechaInicio}
+                                name="tiempoInicio"
+                                value={formData.tiempoInicio}
                                 onChange={handleChange}
                                 className="w-full rounded-[5px]"
                             />
@@ -145,8 +167,8 @@ const Admin = () => {
                             <label>Fecha Fin</label>
                             <input
                                 type="datetime-local"
-                                name="fechaFin"
-                                value={formData.fechaFin}
+                                name="tiempoFin"
+                                value={formData.tiempoFin}
                                 onChange={handleChange}
                                 className="w-full rounded-[5px]"
                             />
@@ -223,8 +245,8 @@ const Admin = () => {
                         <div>
                             <label>Misión</label>
                             <select
-                                name="mision"
-                                value={formData.mision}
+                                name="misiones"
+                                value={formData.misiones}
                                 onChange={handleChange}
                                 className="w-full rounded-[5px] text-black"
                                 id="numero_mision"
