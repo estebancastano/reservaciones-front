@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 
 const SearchBar = ({ searchTerm, handleChange }) => (
     <input
-        type='text'
-        placeholder="Buscar..."
-        onChange={handleChange}
+        type="text"
+        placeholder="Buscar...."
+        className="mb-4 p-2 border border-gray-300 rounded"
         value={searchTerm}
-        className='rounded-lg h-8 mb-8'
+        onChange={handleChange}
     />
 );
 
