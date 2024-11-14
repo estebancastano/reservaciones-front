@@ -12,8 +12,29 @@ const getViajes = async () => {
         console.error('Error al obtener los viajes:', error);
         throw error; // Propaga el error para manejarlo en el componente
     }
-};
+},
+
+    deleteViaje = async (id) => {
+        try {
+            const response = await axios.delete(`${API_URL}/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error al eliminar el viaje:", error);
+            throw error; // Esto permitirá que el componente muestre el error en caso de fallo
+        }
+    },
+
+    updateViaje = async (id, viajeData) => {
+        try {
+            const response = await axios.put(`http://localhost:8000/api/v1/viajes/${id}`, viajeData);
+            return response.data;
+        } catch (error) {
+            console.error("Error al actualizar el viaje:", error);
+            throw error;
+        }
+    };
+
 
 export default {
-    getViajes,
+    getViajes, deleteViaje, updateViaje
 };

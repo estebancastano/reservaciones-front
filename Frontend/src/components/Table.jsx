@@ -3,19 +3,17 @@ import DataTable from 'react-data-table-component';
 import { useState, useEffect } from 'react';
 import isAuthenticated from "./Login";
 import ViajeService from '../../../Backend/src/service/ViajeService';
+import ConfirmationToast from './ConfirmationToast';
 import 'font-awesome/css/font-awesome.min.css';
+import { toast } from 'react-toastify';
 
-const TableComponent = () => {
+const TableComponent = ({searchTerm}) => {
   const [viajes, setViajes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
 
   const handleEdit = (id) => {
     console.log(`Editando el registro con ID: ${id}`);
   };
 
-  const handleDelete = (id) => {
-    console.log(`Eliminando el registro con ID: ${id}`);
-  };
 
   const customStyles = {
     headCells: {
@@ -35,6 +33,30 @@ const TableComponent = () => {
     }
   };
 
+  // Función para eliminar un viaje
+  const handleDelete = async (id) => {
+    toast(
+      <ConfirmationToast
+        onConfirm={async () => {
+          try {
+            await ViajeService.deleteViaje(id);
+            toast.success('Viaje eliminado con éxito');
+            fetchViajes(); // Actualiza la lista después de eliminar
+          } catch (error) {
+            toast.error('Error al eliminar el viaje');
+            console.log(error);
+          }
+        }}
+        onCancel={() => toast.dismiss()}
+      />,
+      {
+        autoClose: false,
+        closeOnClick: true,
+      }
+    );
+  };
+
+
   const fetchViajes = async () => {
     try {
       const data = await ViajeService.getViajes();
@@ -43,6 +65,8 @@ const TableComponent = () => {
       console.error('Error al obtener los viajes:', error);
     }
   };
+
+  
 
   useEffect(() => {
     fetchViajes();
@@ -66,11 +90,14 @@ const TableComponent = () => {
             <div className="flex space-x-2">
               <i
                 className="fa fa-edit text-blue-500 text-xl cursor-pointer hover:text-blue-700"
-                onClick={() => handleEdit(row.id)}
+                onClick={() => handleEdit(row)}
               ></i>
               <i
                 className="fa fa-trash text-red-500 text-xl cursor-pointer hover:text-red-700"
-                onClick={() => handleDelete(row.id)}
+                onClick={() => {
+                  console.log("ID del viaje a eliminar:", row.idViaje);
+                  handleDelete(row.idViaje)}}
+                
               ></i>
             </div>
           ),
@@ -81,16 +108,25 @@ const TableComponent = () => {
 
   // Filtra los datos usando el término de búsqueda
   const filteredData = viajes.filter(row => {
+    const estado = row.estado || '';
     const fecha_inicio = row.tiempoInicio || '';
     const fecha_fin = row.tiempoFin || '';
+    const municipio = row.municipio?.nombreMunicipio || '';
+    const tipo_desplazamiento = row.tipoDesplazamiento?.descripcion || '';
+    const creador = row.usuarioCrea?.nombreUsuario || '';
     const vehiculo = row.vehiculo?.placa || '';
-    const estado = row.estado || '';
+    const mision = row.misiones[0]?.nombreMision || '';
+    
 
     return (
+      estado.toLowerCase().includes(searchTerm.toLowerCase()) ||
       fecha_inicio.toLowerCase().includes(searchTerm.toLowerCase()) ||
       fecha_fin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      municipio.toLowerCase().includes(searchTerm.toLowerCase())||
+      tipo_desplazamiento.toLowerCase().includes(searchTerm.toLowerCase())||
+      creador.toLowerCase().includes(searchTerm.toLowerCase())||
       vehiculo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      estado.toLowerCase().includes(searchTerm.toLowerCase())
+      mision.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -103,14 +139,6 @@ const TableComponent = () => {
 
   return (
     <div className='w-full'>
-      {/* Campo de búsqueda */}
-      <input
-        type="text"
-        placeholder="Buscar...."
-        className="mb-4 p-2 border border-gray-300 rounded"
-        value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
-      />
 
       <DataTable
         columns={columns}

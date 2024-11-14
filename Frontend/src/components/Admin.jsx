@@ -149,7 +149,7 @@ const Admin = () => {
                                 name="estado"
                                 value={formData.estado}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px]"
+                                className="w-full rounded-[5px] shadow-xl"
                             />
                         </div>
 
@@ -160,7 +160,7 @@ const Admin = () => {
                                 name="tiempoInicio"
                                 value={formData.tiempoInicio}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px]"
+                                className="w-full rounded-[5px] shadow-xl"
                             />
                         </div>
                         <div>
@@ -170,7 +170,7 @@ const Admin = () => {
                                 name="tiempoFin"
                                 value={formData.tiempoFin}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px]"
+                                className="w-full rounded-[5px] shadow-xl"
                             />
                         </div>
                         <div>
@@ -179,7 +179,7 @@ const Admin = () => {
                                 name="municipio"
                                 value={formData.municipio}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px] text-black"
+                                className="w-full rounded-[5px] text-black shadow-xl"
                                 id="id_municipio"
                             >
                                 <option value="">Seleccione un municipio</option>
@@ -196,7 +196,7 @@ const Admin = () => {
                                 name="desplazamiento"
                                 value={formData.desplazamiento}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px] text-black"
+                                className="w-full rounded-[5px] text-black shadow-xl"
                                 id="id_desplazamiento"
                             >
                                 <option value="">Seleccione un tipo de desplazamiento</option>
@@ -213,7 +213,7 @@ const Admin = () => {
                                 name="usuarioCrea"
                                 value={formData.usuarioCrea}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px] text-black"
+                                className="w-full rounded-[5px] text-black shadow-xl"
                                 id="idusuario"
                             >
                                 <option value="">Seleccione un creador</option>
@@ -230,7 +230,7 @@ const Admin = () => {
                                 name="vehiculo"
                                 value={formData.vehiculo}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px] text-black"
+                                className="w-full rounded-[5px] text-black shadow-xl"
                                 id="id_vehiculo"
                             >
                                 <option value="">Seleccione un vehículo</option>
@@ -248,7 +248,7 @@ const Admin = () => {
                                 name="misiones"
                                 value={formData.misiones}
                                 onChange={handleChange}
-                                className="w-full rounded-[5px] text-black"
+                                className="w-full rounded-[5px] text-black shadow-xl"
                                 id="numero_mision"
                             >
                                 <option value="">Seleccione una misión</option>
