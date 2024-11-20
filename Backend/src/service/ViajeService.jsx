@@ -23,9 +23,10 @@ const getViajes = async () => {
             throw error; // Esto permitirá que el componente muestre el error en caso de fallo
         }
     },
-
+    
     updateViaje = async (id, viajeData) => {
         try {
+            console.log(viajeData);
             const response = await axios.put(`http://localhost:8000/api/v1/viajes/${id}`, viajeData);
             return response.data;
         } catch (error) {
