@@ -1,106 +1,88 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isAuthenticated, setIsAuthenticated] = useState(null); // null para estado inicial de carga
-    const navigate = useNavigate();
+    const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:3000/login', {
-                nombre_usuario: username,
-                password
-            });
+        setIsLoading(true);
+        setMessage('');
 
-            // Guardar el token en localStorage
-            localStorage.setItem('token', response.data.token);
-            toast.success('Inicio de sesión exitoso');
-            
-            // Actualizar el estado de autenticación
-            setIsAuthenticated(true);
-            
-            // Redirigir al admin
-            navigate('/admin');
+        try {
+            const response = await axios.post('http://localhost:8000/api/auth/login', { username, password });
+            setMessage(response.data);
+            // Aquí podrías guardar el token de sesión si lo estás usando
+            // Por ejemplo: localStorage.setItem('token', response.data.token);
         } catch (error) {
-            toast.error(`Error en el inicio de sesión: ${error.response ? error.response.data : error.message}`);
+            if (axios.isAxiosError(error) && error.response) {
+                setMessage(error.response.data || 'An error occurred during login.');
+            } else {
+                setMessage('An unexpected error occurred.');
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        console.log('Valor del token:', token);
-        
-        // Verificar si existe el token
-        if (token) {
-            setIsAuthenticated(true); // Usuario autenticado
-            
-        } else {
-            setIsAuthenticated(false);  // Usuario no autenticado
-            navigate('/login');  // Redirige al login si no hay token
-        }
-    }, [navigate]);
-console.log('este es mi estado', isAuthenticated);
-    // Mientras se verifica la autenticación
-    if (isAuthenticated === null) {
-        return <div>Cargando...</div>;
-    }
     return (
-        <>
-            <ToastContainer
-                position="bottom-center"  // Esto centra el toast en la parte inferior
-                autoClose={2000}          // Cierra automáticamente después de 3 segundos
-                hideProgressBar={false}    // Muestra la barra de progreso
-                newestOnTop={false}        // Las notificaciones no se apilan con la más nueva arriba
-                closeOnClick               // Cierra cuando haces clic en la notificación
-                rtl={false}                // No usa el modo RTL (de derecha a izquierda)
-                pauseOnFocusLoss           // Pausa cuando se pierde el foco
-                draggable                  // Permite arrastrar la notificación
-                pauseOnHover
-            />
-            <div className="bg-gray-100 flex flex-col justify-center sm:py-28 mt-5">
-                <div className="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
-                    <h1 className="font-bold text-center text-2xl mb-10 text-black">Inicio de sesión</h1>
-                    <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
-                        <div className="px-5 py-7">
-                            <form onSubmit={handleSubmit}>
-                                <label className="font-semibold text-sm text-gray-600 pb-1 block" htmlFor="username">Usuario</label>
-                                <input
-                                    id="username"
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                                    required
-                                />
-                                <label className="font-semibold text-sm text-gray-600 pb-1 block" htmlFor="password">Contraseña</label>
-                                <input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                                    required
-                                />
-                                <button
-                                    type="submit"
-                                    className="transition duration-200 bg-kingBlue hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
-                                >
-                                    <span className="inline-block mr-2">Iniciar sesión</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 inline-block">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
-                                </button>
-                            </form>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full space-y-8">
+                <div>
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+                </div>
+                <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+                    <input type="hidden" name="remember" value="true" />
+                    <div className="rounded-md shadow-sm -space-y-px">
+                        <div>
+                            <label htmlFor="username" className="sr-only">Username</label>
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                required
+                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="password" className="sr-only">Password</label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                required
+                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
                     </div>
-                </div>
+
+                    <div>
+                        <button
+                            type="submit"
+                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Signing in...' : 'Sign in'}
+                        </button>
+                    </div>
+                </form>
+                {message && (
+                    <p className={`mt-2 text-center text-sm ${message.includes('error') ? 'text-red-600' : 'text-green-600'}`}>
+                        {message}
+                    </p>
+                )}
             </div>
-        </>);
+        </div>
+    );
 };
 
 export default Login;
