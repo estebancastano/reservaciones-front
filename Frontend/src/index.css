@@ -4,7 +4,7 @@
 
 body {
     @apply bg-gradient-to-r from-cyan-500 to-blue-500;
-    @apply text-lightGreen;
+    @apply text-lightGray;
 }
 
 html{
